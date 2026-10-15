@@ -685,8 +685,8 @@ html.is-case #home{display:none}
 .media--device{border-radius:0;border:0;background:none;overflow:visible}
 .media--device img{object-fit:contain;filter:drop-shadow(0 18px 26px rgba(0,0,0,.55)) drop-shadow(0 2px 6px rgba(0,0,0,.35))}
 .case-cover-media{border:1px solid var(--line-soft)}
-/* desktop: cap the case-study cover at 600px tall; width follows the 16:9 ratio, so nothing is cropped */
-@media(min-width:1081px){.case-cover-media{max-width:calc(600px * var(--r, 16 / 9))}}
+/* desktop: cap the case-study cover at 600px tall and center it; width follows the 16:9 ratio, so nothing is cropped */
+@media(min-width:1081px){.case-cover-media{max-width:calc(600px * var(--r, 16 / 9));margin-inline:auto}}
 .slot--phone{padding:16px 14px}
 .slot--phone .slot__note{font-size:13px}
 .slot--phone .slot__path{font-size:10px}
