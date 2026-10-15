@@ -681,7 +681,12 @@ html.is-case #home{display:none}
 .screens li{display:flex;flex-direction:column;gap:10px}
 .slot--phone,.media--phone{border-radius:24px}
 .media--phone{border:1px solid var(--line-soft);background:var(--bg-2)}
+/* device mockups (gallery): transparent PNG/WebP with the phone frame baked in */
+.media--device{border-radius:0;border:0;background:none;overflow:visible}
+.media--device img{object-fit:contain;filter:drop-shadow(0 18px 26px rgba(0,0,0,.55)) drop-shadow(0 2px 6px rgba(0,0,0,.35))}
 .case-cover-media{border:1px solid var(--line-soft)}
+/* desktop: cap the case-study cover at 600px tall; width follows the 16:9 ratio, so nothing is cropped */
+@media(min-width:1081px){.case-cover-media{max-width:calc(600px * var(--r, 16 / 9))}}
 .slot--phone{padding:16px 14px}
 .slot--phone .slot__note{font-size:13px}
 .slot--phone .slot__path{font-size:10px}
@@ -891,7 +896,7 @@ html:not(.draft) :is(.todo,.todo-inline,.is-todo,.is-todo-only,.slot,.case-cover
   </div>
   <div class="grid">
     <!-- CASES:GRID:START -->
-    <a class="pcard reveal pcard--feature" href="#work/pay-the-pyper"><div class="thumb t1"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/card.webp" alt="" loading="lazy" decoding="async"></div><div class="meta"><h3>Pay the Pyper</h3><span class="tag">Payments</span></div></a>
+    <a class="pcard reveal pcard--feature" href="#work/pay-the-pyper"><div class="thumb t1"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/cover.webp" alt="" loading="lazy" decoding="async"></div><div class="meta"><h3>Pay the Pyper</h3><span class="tag">Payments</span></div></a>
     <a class="pcard reveal" href="#work/cafho"><div class="thumb t2"><img src="joao-augusto-portfolio/assets/work/cafho/card.webp" alt="" loading="lazy" decoding="async"></div><div class="meta"><h3>CAFHO</h3><span class="tag">AR</span></div></a>
     <a class="pcard reveal" href="#work/phomo"><div class="thumb t3"><img src="joao-augusto-portfolio/assets/work/phomo/card.webp" alt="" loading="lazy" decoding="async"></div><div class="meta"><h3>Phomo</h3><span class="tag">Social</span></div></a>
     <a class="pcard reveal" href="#work/pure-savings"><div class="thumb t4"><img src="joao-augusto-portfolio/assets/work/pure-savings/card.webp" alt="" loading="lazy" decoding="async"></div><div class="meta"><h3>Pure Savings</h3><span class="tag">Commerce</span></div></a>
@@ -948,7 +953,7 @@ html:not(.draft) :is(.todo,.todo-inline,.is-todo,.is-todo-only,.slot,.case-cover
   <p class="case-tagline">Handle the money. Play the game.</p>
   <p class="case-summary">A mobile-first payment app that lets adult rec-league organizers collect player fees in one tap, replacing the spreadsheet-and-Venmo chase.</p>
   <dl class="facts"><div><dt>Client</dt><dd><span>Pay the Pyper founders, via Chop Dawg Studios</span></dd></div><div><dt>Platform</dt><dd><span>Mobile, React Native, Stripe</span></dd></div><div><dt>Role</dt><dd><span data-proposed>Product design and UX copy</span></dd></div><div class="is-todo-only"><dt>Timeline</dt><dd><span class="todo-inline">To fill</span></dd></div><div class="is-todo-only"><dt>Team</dt><dd><span class="todo-inline">To fill</span></dd></div></dl>
-  <figure class="media case-cover-media" style="--r:16 / 9"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/cover.webp" alt="Four Pay the Pyper App Store screens: Stop chasing payments, Build your group, Collect, and Set the event." decoding="async"></figure>
+  <figure class="media case-cover-media" style="--r:16 / 9"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/cover.webp" alt="Three Pay the Pyper screens on iPhone: player home, organizer dashboard, and event detail with payment status." decoding="async"></figure>
 </section>
 
 <div class="case-body">
@@ -1109,14 +1114,14 @@ html:not(.draft) :is(.todo,.todo-inline,.is-todo,.is-todo-only,.slot,.case-cover
 <section class="sec" id="work/pay-the-pyper/screens" data-section="screens" aria-labelledby="pay-the-pyper-screens-title">
 <div class="sec__head"><span class="sec__num" aria-hidden="true"></span><h2 class="sec__title" id="pay-the-pyper-screens-title">High-fidelity screens</h2></div>
 <ul class="screens">
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/screen-role-selection.webp" alt="Role selection: How will you use Pay the Pyper? Captain or Player." loading="lazy" decoding="async"></figure><span class="screens__label">Role selection</span></li>
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/screen-organizer-dashboard.webp" alt="Organizer home: $320 collected this month, 3 payments pending, and a list of groups." loading="lazy" decoding="async"></figure><span class="screens__label">Organizer dashboard</span></li>
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/screen-event-detail.webp" alt="Event detail for Monday Night Hockey: 8 of 12 paid, $320 collected, $160 remaining." loading="lazy" decoding="async"></figure><span class="screens__label">Event detail with payment status</span></li>
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/screen-pay-sheet.webp" alt="Payment due: $40 for Monday Night Hockey, with Pay the Pyper and Confirm manual payment buttons." loading="lazy" decoding="async"></figure><span class="screens__label">Player pay sheet</span></li>
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/screen-payment-success.webp" alt="Payment successful: $40 paid for Monday Hockey, with a receipt." loading="lazy" decoding="async"></figure><span class="screens__label">Payment success</span></li>
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/screen-player-home.webp" alt="Player home: event invite to accept, group invitations and upcoming events across groups." loading="lazy" decoding="async"></figure><span class="screens__label">Player multi-group home</span></li>
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/screen-dark-home.webp" alt="Organizer home in dark mode." loading="lazy" decoding="async"></figure><span class="screens__label">Dark mode: organizer home</span></li>
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/screen-dark-group.webp" alt="Group detail in dark mode, with paid, pending and removed player statuses." loading="lazy" decoding="async"></figure><span class="screens__label">Dark mode: group roster</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/mockup-role-selection.webp" alt="Role selection: How will you use Pay the Pyper? Captain or Player." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Role selection</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/mockup-organizer-dashboard.webp" alt="Organizer home: $320 collected this month, 3 payments pending, and a list of groups." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Organizer dashboard</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/mockup-event-detail.webp" alt="Event detail for Monday Night Hockey: 8 of 12 paid, $320 collected, $160 remaining." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Event detail with payment status</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/mockup-pay-sheet.webp" alt="Payment due: $40 for Monday Night Hockey, with Pay the Pyper and Confirm manual payment buttons." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Player pay sheet</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/mockup-payment-success.webp" alt="Payment successful: $40 paid for Monday Hockey, with a receipt." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Payment success</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/mockup-player-home.webp" alt="Player home: event invite to accept, group invitations and upcoming events across groups." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Player multi-group home</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/mockup-dark-home.webp" alt="Organizer home in dark mode." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Dark mode: organizer home</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/pay-the-pyper/mockup-dark-group.webp" alt="Group detail in dark mode, with paid, pending and removed player statuses." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Dark mode: group roster</span></li>
 </ul>
 
 </section>
@@ -1164,7 +1169,7 @@ html:not(.draft) :is(.todo,.todo-inline,.is-todo,.is-todo-only,.slot,.case-cover
   <p class="case-tagline" data-proposed>Find your car by following the hologram.</p>
   <p class="case-summary">An iOS augmented-reality app that guides you back to your parked car with a color-changing 3D hologram.</p>
   <dl class="facts"><div><dt>Studio</dt><dd><span>Chop Dawg Studios</span></dd></div><div><dt>Platform</dt><dd><span>iOS-first, ARKit</span></dd></div><div class="is-todo-only"><dt>Role</dt><dd><span class="todo-inline">To fill</span></dd></div><div class="is-todo-only"><dt>Timeline</dt><dd><span class="todo-inline">To fill</span></dd></div><div class="is-todo-only"><dt>Team</dt><dd><span class="todo-inline">To fill</span></dd></div></dl>
-  <figure class="media case-cover-media" style="--r:16 / 9"><img src="joao-augusto-portfolio/assets/work/cafho/cover.webp" alt="Three iPhone captures from the CAFHO AR build: a red hologram anchored in a warehouse test, seen from different distances." decoding="async"></figure>
+  <figure class="media case-cover-media" style="--r:16 / 9"><img src="joao-augusto-portfolio/assets/work/cafho/cover.webp" alt="Three CAFHO screens on iPhone: home with a saved spot, AR navigation in a parking garage, and the arrival state." decoding="async"></figure>
 </section>
 
 <div class="case-body">
@@ -1300,21 +1305,12 @@ html:not(.draft) :is(.todo,.todo-inline,.is-todo,.is-todo-only,.slot,.case-cover
 <section class="sec" id="work/cafho/screens" data-section="screens" aria-labelledby="cafho-screens-title">
 <div class="sec__head"><span class="sec__num" aria-hidden="true"></span><h2 class="sec__title" id="cafho-screens-title">High-fidelity screens</h2></div>
 <ul class="screens">
-<li class="is-todo-only"><figure class="slot slot--phone" style="--r:9 / 19.5" role="img" aria-label="Image to come: Home">
-  <span class="slot__note">Home</span>
-  <span class="slot__path">joao-augusto-portfolio/assets/work/cafho/screen-home.webp</span>
-</figure><span class="screens__label">Home</span></li>
-<li class="is-todo-only"><figure class="slot slot--phone" style="--r:9 / 19.5" role="img" aria-label="Image to come: Permission priming">
-  <span class="slot__note">Permission priming</span>
-  <span class="slot__path">joao-augusto-portfolio/assets/work/cafho/screen-permission-priming.webp</span>
-</figure><span class="screens__label">Permission priming</span></li>
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/cafho/screen-ar-far.webp" alt="AR build capture: the red hologram seen from a few meters away." loading="lazy" decoding="async"></figure><span class="screens__label">Build test: at a distance</span></li>
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/cafho/screen-ar-near.webp" alt="AR build capture: the red hologram anchored on a toolbox, closer." loading="lazy" decoding="async"></figure><span class="screens__label">Build test: closing in</span></li>
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/cafho/screen-ar-arrived.webp" alt="AR build capture: the red hologram filling the view up close." loading="lazy" decoding="async"></figure><span class="screens__label">Build test: up close</span></li>
-<li class="is-todo-only"><figure class="slot slot--phone" style="--r:9 / 19.5" role="img" aria-label="Image to come: Fallback state">
-  <span class="slot__note">Fallback state</span>
-  <span class="slot__path">joao-augusto-portfolio/assets/work/cafho/screen-fallback.webp</span>
-</figure><span class="screens__label">Fallback state</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/cafho/mockup-onboarding.webp" alt="Onboarding: AR-powered guidance. Follow the AR path and 3D arrows to your parked car." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Onboarding: AR guidance</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/cafho/mockup-permission-priming.webp" alt="Permission priming: enable location, camera and notifications before setting up AR." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Permission priming</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/cafho/mockup-home.webp" alt="Home with a saved spot: Parked, last saved 4 hours ago downtown, with a Find My Car button." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Home: car saved</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/cafho/mockup-ar-navigation.webp" alt="AR navigation in a parking garage: a 3D arrow and path, turn right in 5 m, 24 ft remaining." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">AR navigation</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/cafho/mockup-fallback-map.webp" alt="Map navigation: the route to the car, zone Level 4, Row B near the elevator, and a View in AR button." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Fallback: map navigation</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/cafho/mockup-arrived.webp" alt="Arrival: You've arrived, with Clear this spot and Go to Home." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Arrival: clear the spot</span></li>
 </ul>
 
 </section>
@@ -1362,7 +1358,7 @@ html:not(.draft) :is(.todo,.todo-inline,.is-todo,.is-todo-only,.slot,.case-cover
   <p class="case-tagline" data-proposed>Post today’s prompt. Then see everyone else’s.</p>
   <p class="case-summary">A social app built around one daily shared prompt: you post your answer to unlock the feed.</p>
   <dl class="facts"><div><dt>Studio</dt><dd><span>Chop Dawg Studios</span></dd></div><div class="is-todo-only"><dt>Platform</dt><dd><span class="todo-inline">To fill</span></dd></div><div class="is-todo-only"><dt>Role</dt><dd><span class="todo-inline">To fill</span></dd></div><div class="is-todo-only"><dt>Timeline</dt><dd><span class="todo-inline">To fill</span></dd></div><div class="is-todo-only"><dt>Team</dt><dd><span class="todo-inline">To fill</span></dd></div></dl>
-  <figure class="media case-cover-media" style="--r:16 / 9"><img src="joao-augusto-portfolio/assets/work/phomo/cover.webp" alt="Five Phomo App Store screens: logo, One prompt. Post to unlock, The same prompt for everyone, Post to unlock the feed, Keep your streak alive." decoding="async"></figure>
+  <figure class="media case-cover-media" style="--r:16 / 9"><img src="joao-augusto-portfolio/assets/work/phomo/cover.webp" alt="Three Phomo screens on iPhone: locked feed, unlocked feed with today's caption, and profile with streak stats." decoding="async"></figure>
 </section>
 
 <div class="case-body">
@@ -1504,12 +1500,12 @@ html:not(.draft) :is(.todo,.todo-inline,.is-todo,.is-todo-only,.slot,.case-cover
 <section class="sec" id="work/phomo/screens" data-section="screens" aria-labelledby="phomo-screens-title">
 <div class="sec__head"><span class="sec__num" aria-hidden="true"></span><h2 class="sec__title" id="phomo-screens-title">High-fidelity screens</h2></div>
 <ul class="screens">
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/phomo/screen-camera.webp" alt="Daily post camera, capturing a night street scene." loading="lazy" decoding="async"></figure><span class="screens__label">Daily post: camera</span></li>
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/phomo/screen-compose.webp" alt="Daily post compose screen with today's caption and a description field." loading="lazy" decoding="async"></figure><span class="screens__label">Compose</span></li>
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/phomo/screen-feed-locked.webp" alt="Locked feed: a blurred post behind the prompt Post for today to unlock the Pheed." loading="lazy" decoding="async"></figure><span class="screens__label">Feed: locked</span></li>
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/phomo/screen-feed-unlocked.webp" alt="Unlocked feed with today's caption, a post, trophies and comments." loading="lazy" decoding="async"></figure><span class="screens__label">Feed: unlocked</span></li>
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/phomo/screen-profile.webp" alt="Profile with 24 trophies and a weekly trophy streak chart." loading="lazy" decoding="async"></figure><span class="screens__label">Profile with streak stats</span></li>
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/phomo/screen-settings-upgrade.webp" alt="Settings with an Upgrade to Premium entry." loading="lazy" decoding="async"></figure><span class="screens__label">Settings: upgrade to Premium</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/phomo/mockup-camera.webp" alt="Daily post camera, capturing a night street scene." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Daily post: camera</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/phomo/mockup-compose.webp" alt="Daily post compose screen with today's caption and a description field." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Compose</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/phomo/mockup-feed-locked.webp" alt="Locked feed: a blurred post behind the prompt Post for today to unlock the Pheed." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Feed: locked</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/phomo/mockup-feed-unlocked.webp" alt="Unlocked feed with today's caption, a post, trophies and comments." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Feed: unlocked</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/phomo/mockup-profile.webp" alt="Profile with 24 trophies and a weekly trophy streak chart." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Profile with streak stats</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/phomo/mockup-settings-upgrade.webp" alt="Settings with an Upgrade to Premium entry." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Settings: upgrade to Premium</span></li>
 </ul>
 
 </section>
@@ -1557,7 +1553,7 @@ html:not(.draft) :is(.todo,.todo-inline,.is-todo,.is-todo-only,.slot,.case-cover
   <p class="case-tagline" data-proposed>One subscription. Every local deal.</p>
   <p class="case-summary">A subscription app for local coupons.</p>
   <dl class="facts"><div><dt>Studio</dt><dd><span>Chop Dawg Studios</span></dd></div><div class="is-todo-only"><dt>Platform</dt><dd><span class="todo-inline">To fill</span></dd></div><div class="is-todo-only"><dt>Role</dt><dd><span class="todo-inline">To fill</span></dd></div><div class="is-todo-only"><dt>Timeline</dt><dd><span class="todo-inline">To fill</span></dd></div><div class="is-todo-only"><dt>Team</dt><dd><span class="todo-inline">To fill</span></dd></div></dl>
-  <figure class="media case-cover-media" style="--r:16 / 9"><img src="joao-augusto-portfolio/assets/work/pure-savings/cover.webp" alt="Pure Savings onboarding screen, Discover Great Deals, on an iPhone." decoding="async"></figure>
+  <figure class="media case-cover-media" style="--r:16 / 9"><img src="joao-augusto-portfolio/assets/work/pure-savings/cover.webp" alt="Three Pure Savings screens on iPhone: nearby deals map, home with monthly savings, and an active coupon countdown." decoding="async"></figure>
 </section>
 
 <div class="case-body">
@@ -1697,27 +1693,13 @@ html:not(.draft) :is(.todo,.todo-inline,.is-todo,.is-todo-only,.slot,.case-cover
 <section class="sec" id="work/pure-savings/screens" data-section="screens" aria-labelledby="pure-savings-screens-title">
 <div class="sec__head"><span class="sec__num" aria-hidden="true"></span><h2 class="sec__title" id="pure-savings-screens-title">High-fidelity screens</h2></div>
 <ul class="screens">
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/pure-savings/screen-onboarding-discover.webp" alt="Onboarding: Discover Great Deals, find the best offers near you." loading="lazy" decoding="async"></figure><span class="screens__label">Onboarding: discover deals</span></li>
-<li class="is-todo-only"><figure class="slot slot--phone" style="--r:9 / 19.5" role="img" aria-label="Image to come: Discover">
-  <span class="slot__note">Discover</span>
-  <span class="slot__path">joao-augusto-portfolio/assets/work/pure-savings/screen-discover.webp</span>
-</figure><span class="screens__label">Discover</span></li>
-<li class="is-todo-only"><figure class="slot slot--phone" style="--r:9 / 19.5" role="img" aria-label="Image to come: Deal detail">
-  <span class="slot__note">Deal detail</span>
-  <span class="slot__path">joao-augusto-portfolio/assets/work/pure-savings/screen-deal-detail.webp</span>
-</figure><span class="screens__label">Deal detail</span></li>
-<li class="is-todo-only"><figure class="slot slot--phone" style="--r:9 / 19.5" role="img" aria-label="Image to come: Redeem screen">
-  <span class="slot__note">Redeem screen</span>
-  <span class="slot__path">joao-augusto-portfolio/assets/work/pure-savings/screen-redeem.webp</span>
-</figure><span class="screens__label">Redeem screen</span></li>
-<li class="is-todo-only"><figure class="slot slot--phone" style="--r:9 / 19.5" role="img" aria-label="Image to come: Savings tracker">
-  <span class="slot__note">Savings tracker</span>
-  <span class="slot__path">joao-augusto-portfolio/assets/work/pure-savings/screen-savings.webp</span>
-</figure><span class="screens__label">Savings tracker</span></li>
-<li class="is-todo-only"><figure class="slot slot--phone" style="--r:9 / 19.5" role="img" aria-label="Image to come: Subscription">
-  <span class="slot__note">Subscription</span>
-  <span class="slot__path">joao-augusto-portfolio/assets/work/pure-savings/screen-subscription.webp</span>
-</figure><span class="screens__label">Subscription</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/pure-savings/mockup-onboarding.webp" alt="Onboarding: Everyday savings at local businesses. Discover exclusive deals from your favorite local spots." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Onboarding: everyday savings</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/pure-savings/mockup-home.webp" alt="Home: $1,000 saved this month, category shortcuts and featured offers." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Home: savings and categories</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/pure-savings/mockup-discover-map.webp" alt="Discover: a map of nearby deals with a sheet of nearby coupons." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Discover: nearby deals map</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/pure-savings/mockup-deal-detail.webp" alt="Coupon details: free pastry with any coffee at Joe's Coffee House, save $4, with terms and Redeem promotion." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Deal detail</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/pure-savings/mockup-redeem.webp" alt="Active coupon with a 09:58 countdown: show this to the cashier or use the code." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Redeem screen</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/pure-savings/mockup-savings.webp" alt="Your Savings: all-time and monthly totals, savings over time, and subscription ROI." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Savings tracker</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/pure-savings/mockup-subscription.webp" alt="Premium paywall: Your savings start today, a benefits list and $6.99 a month." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Subscription</span></li>
 </ul>
 
 </section>
@@ -1766,7 +1748,7 @@ html:not(.draft) :is(.todo,.todo-inline,.is-todo,.is-todo-only,.slot,.case-cover
   <p class="case-summary">A React Native app that lets farmers find any photo by the text inside it, using OCR.</p>
   <div class="todo"><span class="todo__label">To fill</span><p>Your shipped tagline goes here.</p></div>
   <dl class="facts"><div><dt>Client</dt><dd><span>Nick Rimpley / RimpTech LLC</span></dd></div><div><dt>Platform</dt><dd><span>React Native</span></dd></div><div><dt>Role</dt><dd><span>Taglines, project briefs, project descriptions</span></dd></div><div><dt>Timeline</dt><dd><span>August 2026 launch target</span></dd></div><div class="is-todo-only"><dt>Team</dt><dd><span class="todo-inline">To fill</span></dd></div></dl>
-  <figure class="media case-cover-media" style="--r:16 / 9"><img src="joao-augusto-portfolio/assets/work/forgotten-acre/cover.webp" alt="Five Forgotten Acre App Store screens: Open the app, Capture now, Every field, Your notes, Find any photo in seconds." decoding="async"></figure>
+  <figure class="media case-cover-media" style="--r:16 / 9"><img src="joao-augusto-portfolio/assets/work/forgotten-acre/cover.webp" alt="Three Forgotten Acre screens on iPhone: search results, camera home after a shot, and photo preview." decoding="async"></figure>
 </section>
 
 <div class="case-body">
@@ -1894,9 +1876,9 @@ html:not(.draft) :is(.todo,.todo-inline,.is-todo,.is-todo-only,.slot,.case-cover
 <section class="sec" id="work/forgotten-acre/screens" data-section="screens" aria-labelledby="forgotten-acre-screens-title">
 <div class="sec__head"><span class="sec__num" aria-hidden="true"></span><h2 class="sec__title" id="forgotten-acre-screens-title">High-fidelity screens</h2></div>
 <ul class="screens">
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/forgotten-acre/screen-camera.webp" alt="Camera home after a shot: a combine harvester, saved to North field." loading="lazy" decoding="async"></figure><span class="screens__label">Camera home</span></li>
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/forgotten-acre/screen-search-results.webp" alt="Search results grouped into folders, photos and OCR notes." loading="lazy" decoding="async"></figure><span class="screens__label">Search results</span></li>
-<li><figure class="media media--phone" style="--r:9 / 19.5"><img src="joao-augusto-portfolio/assets/work/forgotten-acre/screen-photo-preview.webp" alt="Photo preview with folder and category tags, ready to save." loading="lazy" decoding="async"></figure><span class="screens__label">Photo preview: save with a note</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/forgotten-acre/mockup-camera.webp" alt="Camera home after a shot: a combine harvester, saved to North field." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Camera home</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/forgotten-acre/mockup-search-results.webp" alt="Search results grouped into folders, photos and OCR notes." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Search results</span></li>
+<li><figure class="media media--device" style="--r:430 / 883"><img src="joao-augusto-portfolio/assets/work/forgotten-acre/mockup-photo-preview.webp" alt="Photo preview with folder and category tags, ready to save." width="860" height="1766" loading="lazy" decoding="async"></figure><span class="screens__label">Photo preview: save with a note</span></li>
 </ul>
 <div class="todo"><span class="todo__label">To fill</span><p>If UI was out of your scope, swap these for brand boards.</p></div>
 </section>
