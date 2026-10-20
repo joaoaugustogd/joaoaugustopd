@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cylinder Field</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07080a;
+  --panel:rgba(16,17,21,.72);
+  --hair:rgba(255,255,255,.07);
+  --hair-2:rgba(255,255,255,.12);
+  --text:#ecedef;
+  --muted:#7d828c;
+  --dim:#4d525b;
+  --accent:#8b93ff;
+  --sans:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:"Geist Mono","SF Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:radial-gradient(120% 90% at 50% 36%,#13151b 0%,#0a0b0e 46%,var(--bg) 100%);
+  color:var(--text);font-family:var(--sans);overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block;cursor:crosshair;touch-action:none}
+.grain{position:fixed;inset:0;pointer-events:none;opacity:.06;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+/* HUD */
+.hud{position:fixed;left:28px;top:26px;pointer-events:none;max-width:320px}
+.eyebrow{display:flex;align-items:center;gap:8px;font:500 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+h1{margin-top:14px;font-size:22px;font-weight:600;letter-spacing:-.025em;line-height:1.1;
+  background:linear-gradient(180deg,#fff 0%,#9aa0ab 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hud p{margin-top:8px;font-size:13px;line-height:1.55;color:var(--muted)}
+kbd{font:500 10.5px var(--mono);padding:1px 5px;border:1px solid var(--hair-2);border-radius:4px;color:#b8bcc4;background:rgba(255,255,255,.03)}
+
+.readout{position:fixed;right:28px;top:26px;min-width:184px;font:400 11px/1 var(--mono);color:var(--muted);pointer-events:none;border-top:1px solid var(--hair)}
+.readout div{display:flex;justify-content:space-between;gap:24px;padding:9px 0;border-bottom:1px solid var(--hair)}
+.readout b{font-weight:500;color:var(--text);font-variant-numeric:tabular-nums}
+
+/* Controls */
+.controls{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);display:flex;align-items:center;gap:6px;padding:6px;
+  background:var(--panel);border:1px solid var(--hair);border-radius:12px;
+  backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
+  box-shadow:0 12px 40px -12px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.04)}
+.group{display:flex;align-items:center;gap:6px}
+.label{font:500 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding-left:8px}
+.seg{display:flex;gap:2px;padding:2px;border-radius:8px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.04)}
+.seg button{appearance:none;border:0;background:transparent;color:var(--muted);font:500 12px/1 var(--sans);padding:8px 11px;border-radius:6px;cursor:pointer;min-width:34px;transition:color .15s,background .15s}
+.seg button:hover{color:var(--text)}
+.seg button[aria-pressed="true"]{background:rgba(255,255,255,.08);color:var(--text);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),0 1px 2px rgba(0,0,0,.4)}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.divider{width:1px;height:20px;background:var(--hair)}
+
+/* Entrance */
+.hud>*,.readout,.controls{animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
+.hud h1{animation-delay:.08s}.hud p{animation-delay:.16s}.readout{animation-delay:.3s}.controls{animation-delay:.45s}
+@keyframes rise{from{opacity:0;translate:0 8px}to{opacity:1;translate:0 0}}
+
+@media (max-width:640px){
+  .readout,.label,.divider{display:none}
+  .hud{left:16px;top:16px}
+  h1{font-size:19px}
+  .controls{left:16px;right:16px;bottom:16px;transform:none;justify-content:space-between}
+  .seg button{padding:11px 12px}
+}
+@media (prefers-reduced-motion:reduce){.hud>*,.readout,.controls{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="field" aria-label="Isometric box filled with cylinders that rise under the pointer"></canvas>
+<div class="grain"></div>
+
+<header class="hud">
+  <div class="eyebrow"><span class="dot"></span>Study 04 — Isometric</div>
+  <h1>Cylinder Field</h1>
+  <p>Move to raise. Click or <kbd>Space</kbd> to send a pulse.</p>
+</header>
+
+<aside class="readout">
+  <div><span>Grid</span><b id="r-grid">12 × 12</b></div>
+  <div><span>Active</span><b id="r-active">000</b></div>
+  <div><span>Peak</span><b id="r-peak">0.95u</b></div>
+  <div><span>Focus</span><b id="r-cur">auto</b></div>
+</aside>
+
+<nav class="controls" aria-label="Field settings">
+  <div class="group"><span class="label">Style</span>
+    <div class="seg" data-key="style"><button data-v="lines" aria-pressed="true">Lines</button><button data-v="solid" aria-pressed="false">Solid</button></div>
+  </div>
+  <div class="divider"></div>
+  <div class="group"><span class="label">Grid</span>
+    <div class="seg" data-key="n"><button data-v="8" aria-pressed="false">8</button><button data-v="12" aria-pressed="true">12</button><button data-v="16" aria-pressed="false">16</button></div>
+  </div>
+  <div class="divider"></div>
+  <div class="group"><span class="label">Reach</span>
+    <div class="seg" data-key="reach"><button data-v="1.1" aria-pressed="false">S</button><button data-v="1.7" aria-pressed="true">M</button><button data-v="2.6" aria-pressed="false">L</button></div>
+  </div>
+</nav>
+
+<script>
+(() => {
+  const canvas = document.getElementById('field');
+  const ctx = canvas.getContext('2d');
+
+  // Isometric basis (30°). A circle of radius r on the floor projects to an ellipse r·√2·cos30 × r·√2·sin30.
+  const COS = Math.cos(Math.PI / 6), SIN = 0.5;
+  const ISO_RX = Math.SQRT2 * COS, ISO_RY = Math.SQRT2 * SIN;
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // World units (1u = one grid cell)
+  const REST = 0.95;     // resting cylinder height
+  const WALL = 1.25;     // box wall height
+  const AMP = 4.4;       // max rise from hover
+  const PAD = 0.2;       // gap between grid and walls
+  const RAD = 0.37;      // cylinder radius
+  const HEADROOM = 3.4;  // vertical room reserved above the box
+  const STEP = 1000 / 60;
+
+  const state = { style: 'lines', n: 12, reach: 1.7 };
+  let W = 0, H = 0, dpr = 1, s = 40, ox = 0, oy = 0;
+  let cyl = [], pulses = [];
+  const ptr = { sx: -1, sy: -1, active: false };
+  const focus = { x: 6, y: 6, k: 0 };
+  let acc = 0, last = performance.now(), frame = 0;
+
+  const rGrid = document.getElementById('r-grid');
+  const rActive = document.getElementById('r-active');
+  const rPeak = document.getElementById('r-peak');
+  const rCur = document.getElementById('r-cur');
+
+  const P = (x, y, z) => [ox + (x - y) * COS * s, oy + (x + y) * SIN * s - z * s];
+  function unproject(sx, sy, z) {
+    const u = (sx - ox) / (COS * s);
+    const v = (sy - oy + z * s) / (SIN * s);
+    return { x: (u + v) / 2, y: (v - u) / 2 };
+  }
+
+  function build() {
+    const n = state.n, now = performance.now();
+    cyl = [];
+    for (let i = 0; i < n; i++)
+      for (let j = 0; j < n; j++)
+        cyl.push({ i, j, x: i + 0.5, y: j + 0.5, h: 0.02, v: 0, born: now + (i + j) * 22 });
+    // Painter's order: back corner first
+    cyl.sort((a, b) => (a.i + a.j) - (b.i + b.j) || a.i - b.i);
+    focus.x = focus.y = n / 2;
+    pulses = [];
+    rGrid.textContent = `${n} × ${n}`;
+    layout();
+  }
+
+  function layout() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = innerWidth; H = innerHeight;
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const L = state.n + PAD * 2;
+    const mobile = W < 640;
+    const sW = (W * (mobile ? 0.94 : 0.82)) / (2 * L * COS);
+    const sH = (H * 0.8) / (L + HEADROOM);
+    s = Math.min(sW, sH);
+    const a = -PAD, b = state.n + PAD;
+    ox = W / 2;
+    const top = (a - HEADROOM) * s, bottom = b * s;
+    oy = H / 2 - (top + bottom) / 2 - (mobile ? 30 : 12);
+  }
+
+  // ---------- Simulation ----------
+  function step(t) {
+    const n = state.n;
+    let tx, ty, k;
+    if (ptr.active) {
+      const g = unproject(ptr.sx, ptr.sy, REST);
+      tx = g.x; ty = g.y;
+      const m = state.reach * 1.5;
+      k = (g.x > -m && g.x < n + m && g.y > -m && g.y < n + m) ? 1 : 0;
+    } else if (!reduceMotion) {
+      // Autopilot: a slow Lissajous drift keeps the field alive when idle
+      const tt = t * 0.001;
+      tx = n / 2 + Math.sin(tt * 0.47) * n * 0.3 + Math.sin(tt * 1.13) * n * 0.06;
+      ty = n / 2 + Math.sin(tt * 0.36 + 1.7) * n * 0.3;
+      k = 0.72;
+    } else { tx = n / 2; ty = n / 2; k = 0; }
+
+    focus.x += (tx - focus.x) * 0.16;
+    focus.y += (ty - focus.y) * 0.16;
+    focus.k += (k - focus.k) * 0.05;
+
+    const inv = 1 / (2 * state.reach * state.reach);
+    const tt = t * 0.001;
+    if (pulses.length) pulses = pulses.filter(p => t - p.t0 < 3200);
+
+    for (const c of cyl) {
+      if (t < c.born) continue;
+      const dx = c.x - focus.x, dy = c.y - focus.y;
+      let target = REST + AMP * focus.k * Math.exp(-(dx * dx + dy * dy) * inv);
+      if (!reduceMotion) target += 0.07 * Math.sin(tt * 1.6 + (c.x + c.y) * 0.5);
+      for (const p of pulses) {
+        const age = (t - p.t0) * 0.001;
+        const w = Math.hypot(c.x - p.x, c.y - p.y) - age * 8;
+        target += 1.9 * Math.exp(-w * w * 1.1) * Math.exp(-age * 1.3);
+      }
+      // Damped spring → slight overshoot, settles fast
+      c.v += (target - c.h) * 0.085;
+      c.v *= 0.8;
+      c.h += c.v;
+      if (c.h < 0.02) { c.h = 0.02; c.v = 0; }
+    }
+  }
+
+  // ---------- Rendering ----------
+  function poly(pts) {
+    ctx.beginPath();
+    ctx.moveTo(pts[0][0], pts[0][1]);
+    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+    ctx.closePath();
+  }
+  function line(p1, p2) { ctx.moveTo(p1[0], p1[1]); ctx.lineTo(p2[0], p2[1]); }
+
+  function drawFloor() {
+    const n = state.n, a = -PAD, b = n + PAD;
+    poly([P(a, a, 0), P(b, a, 0), P(b, b, 0), P(a, b, 0)]);
+    ctx.fillStyle = 'rgba(255,255,255,0.018)';
+    ctx.fill();
+    ctx.beginPath();
+    for (let i = 0; i <= n; i++) {
+      line(P(i, 0, 0), P(i, n, 0));
+      line(P(0, i, 0), P(n, i, 0));
+    }
+    ctx.strokeStyle = 'rgba(255,255,255,0.045)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  function drawBack() {
+    const a = -PAD, b = state.n + PAD;
+    const left = [P(a, a, 0), P(a, b, 0), P(a, b, WALL), P(a, a, WALL)];
+    const right = [P(a, a, 0), P(b, a, 0), P(b, a, WALL), P(a, a, WALL)];
+    poly(left); ctx.fillStyle = 'rgba(255,255,255,0.032)'; ctx.fill();
+    poly(right); ctx.fillStyle = 'rgba(255,255,255,0.018)'; ctx.fill();
+    ctx.beginPath();
+    line(P(a, a, 0), P(a, a, WALL));
+    line(P(a, a, WALL), P(b, a, WALL));
+    line(P(a, a, WALL), P(a, b, WALL));
+    ctx.strokeStyle = 'rgba(255,255,255,0.14)';
+    ctx.stroke();
+    drawRuler();
+  }
+
+  function drawRuler() {
+    const a = -PAD;
+    const [x0, y0] = P(a, a, WALL);
+    const zTop = HEADROOM - 0.15;
+    const [, y1] = P(a, a, zTop);
+    ctx.save();
+    ctx.setLineDash([2, 4]);
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0, y1); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font = '500 9px "Geist Mono", ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    for (let z = 1.5; z <= zTop - 0.2; z += 0.5) {
+      const yy = P(a, a, z)[1];
+      const major = z % 1 === 0;
+      const t = major ? 4 : 2;
+      ctx.beginPath(); ctx.moveTo(x0 - t, yy); ctx.lineTo(x0 + t, yy); ctx.stroke();
+      if (major) ctx.fillText(z.toFixed(1), x0 - 9, yy);
+    }
+    ctx.textAlign = 'center';
+    ctx.fillText('Z', x0, y1 - 8);
+    ctx.restore();
+  }
+
+  function drawCylinders() {
+    const rx = RAD * ISO_RX * s, ry = RAD * ISO_RY * s;
+    const lines = state.style === 'lines';
+    ctx.lineWidth = 1;
+
+    for (const c of cyl) {
+      const [bx, by] = P(c.x, c.y, 0);
+      const hh = c.h * s;
+      const ty = by - hh;
+      const e = Math.max(0, Math.min(1, (c.h - REST - 0.1) / (AMP * 0.8)));
+      const hue = 236 - 46 * e; // indigo → cyan as it rises
+
+      // Side silhouette: front half of base + back half of top
+      ctx.beginPath();
+      ctx.moveTo(bx - rx, by);
+      ctx.ellipse(bx, by, rx, ry, 0, Math.PI, 0, true);
+      ctx.lineTo(bx + rx, ty);
+      ctx.ellipse(bx, ty, rx, ry, 0, 0, Math.PI, true);
+      ctx.closePath();
+
+      if (lines) {
+        ctx.fillStyle = `hsla(${hue},${20 + 30 * e}%,${5 + 5 * e}%,1)`;
+        ctx.fill();
+        ctx.strokeStyle = `hsla(${hue},${15 + 70 * e}%,${68 + 12 * e}%,${0.2 + 0.7 * e})`;
+        ctx.stroke();
+        // Engraving-style hatch: evenly spaced angles → lines bunch at the edges, reading as curvature
+        if (hh > 6) {
+          ctx.beginPath();
+          for (let k = 1; k < 6; k++) {
+            const th = Math.PI * k / 6;
+            const hx = bx + rx * Math.cos(th), hy = ry * Math.sin(th);
+            ctx.moveTo(hx, by + hy); ctx.lineTo(hx, ty + hy);
+          }
+          ctx.strokeStyle = `hsla(${hue},${20 + 60 * e}%,70%,${0.04 + 0.32 * e})`;
+          ctx.stroke();
+        }
+      } else {
+        const g = ctx.createLinearGradient(bx - rx, 0, bx + rx, 0);
+        g.addColorStop(0, `hsla(${hue},${18 + 30 * e}%,${9 + 6 * e}%,1)`);
+        g.addColorStop(0.32, `hsla(${hue},${22 + 45 * e}%,${20 + 26 * e}%,1)`);
+        g.addColorStop(0.7, `hsla(${hue},${18 + 30 * e}%,${11 + 10 * e}%,1)`);
+        g.addColorStop(1, `hsla(${hue},${16 + 20 * e}%,${6 + 4 * e}%,1)`);
+        ctx.fillStyle = g;
+        ctx.fill();
+        ctx.strokeStyle = `hsla(${hue},40%,80%,${0.06 + 0.25 * e})`;
+        ctx.stroke();
+      }
+
+      // Top cap
+      ctx.beginPath();
+      ctx.ellipse(bx, ty, rx, ry, 0, 0, Math.PI * 2);
+      if (lines) {
+        ctx.fillStyle = `hsla(${hue},${25 + 40 * e}%,${7 + 14 * e}%,1)`;
+        ctx.fill();
+        ctx.strokeStyle = `hsla(${hue},${20 + 70 * e}%,${74 + 14 * e}%,${0.32 + 0.68 * e})`;
+        ctx.stroke();
+      } else {
+        ctx.fillStyle = `hsla(${hue},${22 + 50 * e}%,${26 + 40 * e}%,1)`;
+        ctx.fill();
+        ctx.strokeStyle = `hsla(${hue},60%,88%,${0.1 + 0.5 * e})`;
+        ctx.stroke();
+      }
+
+      // Soft additive glow on raised caps
+      if (e > 0.2) {
+        const gr = rx * 2.2;
+        const glow = ctx.createRadialGradient(bx, ty, 0, bx, ty, gr);
+        glow.addColorStop(0, `hsla(${hue},90%,66%,${0.15 * e})`);
+        glow.addColorStop(1, `hsla(${hue},90%,66%,0)`);
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.ellipse(bx, ty, gr, gr * 0.6, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalCompositeOperation = 'source-over';
+      }
+    }
+  }
+
+  function drawFront() {
+    const a = -PAD, b = state.n + PAD;
+    const faces = [
+      { pts: [P(a, b, 0), P(b, b, 0), P(b, b, WALL), P(a, b, WALL)], top: 0.5, bot: 0.86 }, // left-front (y = b)
+      { pts: [P(b, a, 0), P(b, b, 0), P(b, b, WALL), P(b, a, WALL)], top: 0.42, bot: 0.8 }  // right-front (x = b)
+    ];
+    for (const f of faces) {
+      const ys = f.pts.map(p => p[1]);
+      const g = ctx.createLinearGradient(0, Math.min(...ys), 0, Math.max(...ys));
+      g.addColorStop(0, `rgba(11,12,16,${f.top})`);
+      g.addColorStop(1, `rgba(7,8,10,${f.bot})`);
+      poly(f.pts); ctx.fillStyle = g; ctx.fill();
+    }
+    ctx.beginPath();
+    line(P(a, b, 0), P(b, b, 0));
+    line(P(b, a, 0), P(b, b, 0));
+    line(P(a, b, 0), P(a, b, WALL));
+    line(P(b, a, 0), P(b, a, WALL));
+    ctx.strokeStyle = 'rgba(255,255,255,0.14)';
+    ctx.stroke();
+    // Rim + front corner catch the light
+    ctx.beginPath();
+    line(P(a, b, WALL), P(b, b, WALL));
+    line(P(b, a, WALL), P(b, b, WALL));
+    line(P(b, b, 0), P(b, b, WALL));
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    ctx.stroke();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    drawFloor();
+    drawBack();
+    drawCylinders();
+    drawFront();
+  }
+
+  function updateReadout() {
+    let peak = 0, active = 0;
+    for (const c of cyl) { if (c.h > peak) peak = c.h; if (c.h > REST + 0.35) active++; }
+    rActive.textContent = String(active).padStart(3, '0');
+    rPeak.textContent = peak.toFixed(2) + 'u';
+    rCur.textContent = ptr.active ? `${focus.x.toFixed(1)}, ${focus.y.toFixed(1)}` : 'auto';
+  }
+
+  function loop(now) {
+    let dt = now - last; last = now;
+    if (dt > 100) dt = 100;
+    acc += dt;
+    while (acc >= STEP) { step(now); acc -= STEP; }
+    draw();
+    if (++frame % 8 === 0) updateReadout();
+    requestAnimationFrame(loop);
+  }
+
+  // ---------- Input ----------
+  function pulseAt(x, y) {
+    pulses.push({ x, y, t0: performance.now() });
+    if (pulses.length > 6) pulses.shift();
+  }
+  canvas.addEventListener('pointermove', e => { ptr.sx = e.clientX; ptr.sy = e.clientY; ptr.active = true; });
+  canvas.addEventListener('pointerdown', e => {
+    ptr.sx = e.clientX; ptr.sy = e.clientY; ptr.active = true;
+    const g = unproject(e.clientX, e.clientY, REST);
+    pulseAt(g.x, g.y);
+  });
+  canvas.addEventListener('pointerleave', () => { ptr.active = false; });
+  canvas.addEventListener('pointerup', e => { if (e.pointerType !== 'mouse') ptr.active = false; });
+  canvas.addEventListener('pointercancel', () => { ptr.active = false; });
+  addEventListener('blur', () => { ptr.active = false; });
+  addEventListener('resize', layout);
+  addEventListener('keydown', e => {
+    if (e.code === 'Space' && !(e.target instanceof HTMLButtonElement)) { e.preventDefault(); pulseAt(focus.x, focus.y); }
+  });
+
+  document.querySelectorAll('.seg').forEach(seg => {
+    const key = seg.dataset.key;
+    seg.addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      seg.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+      const v = btn.dataset.v;
+      if (key === 'style') state.style = v;
+      else if (key === 'n') { state.n = +v; build(); }
+      else if (key === 'reach') state.reach = +v;
+    });
+  });
+
+  // Phones: start with a coarser grid so each cylinder is a real touch target
+  if (innerWidth < 640) {
+    state.n = 8;
+    document.querySelectorAll('[data-key="n"] button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === '8')));
+  }
+
+  build();
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
