@@ -2489,14 +2489,25 @@ const gallery = (function(){
   function stop() { running = false; }
 
   function pulseAt(x, y) { pulses.push({ x, y, t0: performance.now() }); if (pulses.length > 6) pulses.shift(); }
-  canvas.addEventListener('pointermove', e => { [ptr.sx, ptr.sy] = local(e); ptr.active = true; });
-  canvas.addEventListener('pointerdown', e => {
-    [ptr.sx, ptr.sy] = local(e); ptr.active = true;
-    const g = unproject(ptr.sx, ptr.sy, REST); pulseAt(g.x, g.y);
+  /* Listen on the whole hero, not just the canvas: the hero text and meta layers sit on top
+     of the field, so canvas-only listeners would miss the pointer. Position is mapped into
+     canvas space; the field reacts whenever the pointer is over (or near) the box. */
+  const surface = stage.closest('.hero') || canvas;
+  const inside = (x, y) => x > -40 && y > -40 && x < W + 40 && y < H + 40;
+  const isControl = el => !!(el && el.closest && el.closest('a,button,input,select,textarea,.field-controls,.lang'));
+  surface.addEventListener('pointermove', e => {
+    const [x, y] = local(e);
+    ptr.sx = x; ptr.sy = y; ptr.active = inside(x, y);
+  }, { passive: true });
+  surface.addEventListener('pointerdown', e => {
+    const [x, y] = local(e);
+    if (!inside(x, y) || x < 0 || y < 0 || x > W || y > H || isControl(e.target)) return;
+    ptr.sx = x; ptr.sy = y; ptr.active = true;
+    const g = unproject(x, y, REST); pulseAt(g.x, g.y);
   });
-  canvas.addEventListener('pointerleave', () => { ptr.active = false; });
-  canvas.addEventListener('pointerup', e => { if (e.pointerType !== 'mouse') ptr.active = false; });
-  canvas.addEventListener('pointercancel', () => { ptr.active = false; });
+  surface.addEventListener('pointerleave', () => { ptr.active = false; });
+  surface.addEventListener('pointerup', e => { if (e.pointerType !== 'mouse') ptr.active = false; });
+  surface.addEventListener('pointercancel', () => { ptr.active = false; });
   canvas.addEventListener('keydown', e => {
     if (e.code === 'Space' || e.key === 'Enter') { e.preventDefault(); pulseAt(focus.x, focus.y); }
   });
