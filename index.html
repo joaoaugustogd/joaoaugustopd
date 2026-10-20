@@ -399,7 +399,7 @@ a.shot{display:block;cursor:pointer}
 }
 @media(max-width:900px){.social-grid{grid-template-columns:repeat(2,1fr)}}
 .social-tile{
-  aspect-ratio:1/1;border-radius:14px;border:1px solid var(--line-soft);
+  aspect-ratio:4/3;min-height:150px;border-radius:14px;border:1px solid var(--line-soft);
   display:flex;flex-direction:column;justify-content:space-between;padding:20px;
   font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);
   transition:border-color .3s,background .3s,color .3s;position:relative;overflow:hidden;
@@ -769,6 +769,12 @@ html:not(.draft) :is(.todo,.todo-inline,.is-todo,.is-todo-only,.slot,.case-cover
 /* ---------- cylinder field: interactive hero visual (right side of the hero) ---------- */
 .hero{overflow:hidden}
 .hero-top,.hero-meta{position:relative;z-index:1}
+/* the text layers span the full hero width; let pointer events fall through to the field canvas */
+.hero-top,.hero-meta{pointer-events:none}
+.hero-top > *,.hero-meta > *{pointer-events:auto}
+@media(min-width:901px){.hero-top > *{max-width:44vw}}
+/* room for the tilde on "JOÃO" so it never collides with the kicker */
+.hero-top h1{padding-top:.2em}
 .hero-field{
   position:absolute;z-index:0;top:clamp(96px,13vh,140px);bottom:clamp(96px,11vh,120px);
   right:clamp(20px,4vw,48px);width:min(54vw,1100px);
