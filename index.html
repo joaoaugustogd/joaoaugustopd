@@ -766,45 +766,42 @@ html:not(.draft) :is(.todo,.todo-inline,.is-todo,.is-todo-only,.slot,.case-cover
 }
 
 
-/* ---------- cylinder field (interactive study) ---------- */
-.field{position:relative;padding:clamp(64px,8vw,120px) 0 0;border-top:1px solid var(--line-soft);overflow:hidden}
-.field-head{padding:0 clamp(20px,5vw,72px);display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:18px}
-.field-head h2{margin-top:14px;font-family:var(--display);font-weight:400;font-size:clamp(40px,6vw,84px);text-transform:uppercase;line-height:.95}
-.field-head h2 span{color:transparent;-webkit-text-stroke:1.5px var(--lime)}
-.field-head p{max-width:360px;color:var(--ink-dim);line-height:1.6}
-.field kbd{font:500 11px var(--mono);padding:1px 6px;border:1px solid var(--line);border-radius:4px;color:var(--lime);background:rgba(214,255,62,.05)}
-.field-stage{
-  position:relative;height:clamp(520px,82vh,820px);margin-top:clamp(8px,2vw,24px);
-  background:radial-gradient(70% 60% at 50% 46%,rgba(214,255,62,.06),transparent 70%);
+/* ---------- cylinder field: interactive hero visual (right side of the hero) ---------- */
+.hero{overflow:hidden}
+.hero-top,.hero-meta{position:relative;z-index:1}
+.hero-field{
+  position:absolute;z-index:0;top:clamp(96px,13vh,140px);bottom:clamp(96px,11vh,120px);
+  right:clamp(20px,4vw,48px);width:min(54vw,1100px);
+  background:radial-gradient(60% 55% at 50% 50%,rgba(214,255,62,.06),transparent 72%);
 }
-.field-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair;touch-action:pan-y}
-.field-stage canvas:focus-visible{outline:2px solid var(--lime);outline-offset:-6px;border-radius:12px}
-.field-readout{
-  position:absolute;right:clamp(20px,5vw,72px);top:8px;min-width:184px;pointer-events:none;
-  font:400 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-dim);border-top:1px solid var(--line-soft);
-}
-.field-readout div{display:flex;justify-content:space-between;gap:24px;padding:9px 0;border-bottom:1px solid var(--line-soft)}
-.field-readout b{font-weight:500;color:var(--lime);font-variant-numeric:tabular-nums}
+.hero-field canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair;touch-action:pan-y}
+.hero-field canvas:focus-visible{outline:2px solid var(--lime);outline-offset:-6px;border-radius:12px}
+.hero-field .field-hint{position:absolute;top:0;right:0;pointer-events:none;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim)}
+.hero-field kbd{font:500 10px var(--mono);padding:1px 6px;border:1px solid var(--line);border-radius:4px;color:var(--lime)}
+.field-readout{display:none}
 .field-controls{
-  position:absolute;left:50%;bottom:28px;transform:translateX(-50%);display:flex;align-items:center;gap:6px;padding:6px;
+  position:absolute;left:50%;bottom:0;transform:translateX(-50%);display:flex;align-items:center;gap:6px;padding:5px;
   background:rgba(17,23,16,.82);border:1px solid var(--line-soft);border-radius:999px;
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 12px 40px -12px rgba(0,0,0,.7);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
 }
 .field-controls .group{display:flex;align-items:center;gap:6px}
 .field-controls .label{font:500 10px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim);padding-left:10px}
-.field-controls .divider{width:1px;height:20px;background:var(--line-soft)}
+.field-controls .divider{width:1px;height:18px;background:var(--line-soft)}
 .seg{display:flex;gap:2px;padding:2px;border-radius:999px;background:rgba(255,255,255,.03)}
 .seg button{
-  appearance:none;border:0;background:transparent;color:var(--ink-dim);cursor:pointer;min-width:36px;
-  font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:9px 12px;border-radius:999px;
+  appearance:none;border:0;background:transparent;color:var(--ink-dim);cursor:pointer;min-width:34px;
+  font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:8px 11px;border-radius:999px;
   transition:color .15s,background .15s;
 }
 .seg button:hover{color:var(--ink)}
 .seg button[aria-pressed="true"]{background:var(--lime);color:var(--dark-on-lime)}
-@media(max-width:640px){
-  .field-readout,.field-controls .label,.field-controls .divider{display:none}
-  .field-controls{left:16px;right:16px;bottom:16px;transform:none;justify-content:space-between}
-  .seg button{padding:11px 12px}
+/* tablet and phone: the field stacks under the intro instead of sitting beside it */
+@media(max-width:900px){
+  .hero-field{position:relative;top:auto;bottom:auto;right:auto;width:auto;height:min(92vw,440px);margin:0 clamp(20px,5vw,72px) 24px}
+  .hero-field .field-hint{display:none}
+  .field-controls .label,.field-controls .divider{display:none}
+  .field-controls{left:0;right:0;transform:none;justify-content:space-between}
+  .seg button{padding:10px 12px}
 }
 
 /* ---------- language switcher ---------- */
@@ -859,6 +856,30 @@ html:not(.draft) :is(.todo,.todo-inline,.is-todo,.is-todo-only,.slot,.case-cover
       research, strategy, systems and pixel-perfect delivery.
     </p>
   </div>
+  <!-- Interactive hero visual: Cylinder Field (source: joao-augusto-portfolio/assets/work/cylinder-field.html) -->
+  <div class="hero-field" id="field-stage">
+    <canvas id="field" tabindex="0" role="img" aria-label="Isometric box filled with cylinders that rise under the pointer"></canvas>
+    <p class="field-hint" aria-hidden="true">Move to raise. Click or <kbd>Space</kbd> to send a pulse.</p>
+    <aside class="field-readout" aria-hidden="true">
+      <div><span>Grid</span><b id="r-grid" data-i18n-skip>12 × 12</b></div>
+      <div><span>Active</span><b id="r-active" data-i18n-skip>000</b></div>
+      <div><span>Peak</span><b id="r-peak" data-i18n-skip>0.95u</b></div>
+      <div><span>Focus</span><b id="r-cur" data-i18n-skip>auto</b></div>
+    </aside>
+    <div class="field-controls" role="group" aria-label="Field settings">
+      <div class="group"><span class="label">Style</span>
+        <div class="seg" data-key="style"><button type="button" data-v="lines" aria-pressed="true">Lines</button><button type="button" data-v="solid" aria-pressed="false">Solid</button></div>
+      </div>
+      <div class="divider"></div>
+      <div class="group"><span class="label">Grid</span>
+        <div class="seg" data-key="n"><button type="button" data-v="8" aria-pressed="false">8</button><button type="button" data-v="12" aria-pressed="true">12</button><button type="button" data-v="16" aria-pressed="false">16</button></div>
+      </div>
+      <div class="divider"></div>
+      <div class="group"><span class="label">Reach</span>
+        <div class="seg" data-key="reach"><button type="button" data-v="1.1" aria-pressed="false">S</button><button type="button" data-v="1.7" aria-pressed="true">M</button><button type="button" data-v="2.6" aria-pressed="false">L</button></div>
+      </div>
+    </div>
+  </div>
   <div class="hero-meta">
     <span class="mono-label">São Paulo → Worldwide</span>
     <div class="next-up">
@@ -881,39 +902,6 @@ html:not(.draft) :is(.todo,.todo-inline,.is-todo,.is-todo-only,.slot,.case-cover
       actually <mark>love to use</mark> — on screen and beyond it.
     </p>
     <span class="sig">— João Augusto</span>
-  </div>
-</section>
-
-<!-- ================= INTERACTIVE STUDY: CYLINDER FIELD ================= -->
-<section class="field" id="playground" aria-labelledby="field-title">
-  <div class="field-head reveal">
-    <div>
-      <span class="mono-label">Interactive study</span>
-      <h2 id="field-title">Cylinder <span>Field</span></h2>
-    </div>
-    <p>Move to raise. Click or <kbd>Space</kbd> to send a pulse.</p>
-  </div>
-  <div class="field-stage" id="field-stage">
-    <canvas id="field" tabindex="0" role="img" aria-label="Isometric box filled with cylinders that rise under the pointer"></canvas>
-    <aside class="field-readout" aria-hidden="true">
-      <div><span>Grid</span><b id="r-grid" data-i18n-skip>12 × 12</b></div>
-      <div><span>Active</span><b id="r-active" data-i18n-skip>000</b></div>
-      <div><span>Peak</span><b id="r-peak" data-i18n-skip>0.95u</b></div>
-      <div><span>Focus</span><b id="r-cur" data-i18n-skip>auto</b></div>
-    </aside>
-    <div class="field-controls" role="group" aria-label="Field settings">
-      <div class="group"><span class="label">Style</span>
-        <div class="seg" data-key="style"><button type="button" data-v="lines" aria-pressed="true">Lines</button><button type="button" data-v="solid" aria-pressed="false">Solid</button></div>
-      </div>
-      <div class="divider"></div>
-      <div class="group"><span class="label">Grid</span>
-        <div class="seg" data-key="n"><button type="button" data-v="8" aria-pressed="false">8</button><button type="button" data-v="12" aria-pressed="true">12</button><button type="button" data-v="16" aria-pressed="false">16</button></div>
-      </div>
-      <div class="divider"></div>
-      <div class="group"><span class="label">Reach</span>
-        <div class="seg" data-key="reach"><button type="button" data-v="1.1" aria-pressed="false">S</button><button type="button" data-v="1.7" aria-pressed="true">M</button><button type="button" data-v="2.6" aria-pressed="false">L</button></div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -2307,12 +2295,12 @@ const gallery = (function(){
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const L = state.n + PAD * 2, mobile = W < 640;
     const sW = (W * (mobile ? 0.94 : 0.8)) / (2 * L * COS);
-    const sH = (H * 0.8) / (L + HEADROOM);
+    const sH = (H * 0.78) / (L + HEADROOM);
     s = Math.min(sW, sH);
     const a = -PAD, b = state.n + PAD;
     ox = W / 2;
     const top = (a - HEADROOM) * s, bottom = b * s;
-    oy = H / 2 - (top + bottom) / 2 - (mobile ? 36 : 18);
+    oy = H / 2 - (top + bottom) / 2 - (mobile ? 30 : 26);
   }
 
   function step(time) {
@@ -2519,7 +2507,7 @@ const gallery = (function(){
     });
   });
 
-  if (stage.clientWidth < 640) {
+  if (stage.clientWidth < 560) {
     state.n = 8;
     stage.querySelectorAll('[data-key="n"] button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === '8')));
   }
